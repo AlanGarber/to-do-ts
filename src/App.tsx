@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { Todos } from "./assets/components/Todos"
-import { TodoId, type Todo as TodoType } from "./types"
+import { FilterValue, TodoId, type Todo as TodoType } from "./types"
+import { TODO_FILTERS } from "./consts"
+import { Footer } from "./assets/components/Footer"
 
 const ejemploTodos = [
   {
@@ -20,10 +22,9 @@ const ejemploTodos = [
   }
 ]
 
-
-
 const App = (): JSX.Element => {
   const [todos, setTodos] = useState(ejemploTodos)
+  const [filterSelected, setFilterSelected] = useState<FilterValue>(TODO_FILTERS.ALL)
 
   const handleRemove = ({ id }: TodoId): void => {
     const newTodos = todos.filter(todo => todo.id != id)
@@ -46,11 +47,32 @@ const App = (): JSX.Element => {
     setTodos(newTodos)
   }
 
+  const handleFilterChange = (filter: FilterValue): void => {
+    setFilterSelected(filter)
+  }
+
+  const activeCount = todos.filter(todo => !todo.completed).length
+  const completedCount = todos.length - activeCount
+
+  const filteredTodos = todos.filter(todo=>{
+    if (filterSelected==TODO_FILTERS.ACTIVE) return !todo.completed
+    if (filterSelected==TODO_FILTERS.COMPLETED) return todo.completed
+    return todo
+  })
+
   return (
     <div className="todoapp">
-      <Todos todos={todos}
+      <Todos 
+        todos={filteredTodos}
         onToggleCompleteTodo={handleCompleted}
         onRemoveTodo={handleRemove}
+      />
+      <Footer
+        activeCount={activeCount}
+        completedCount={completedCount}
+        filterSelected={filterSelected}
+        onClearCompleted={() => { }}
+        handleFilterChange={handleFilterChange}
       />
     </div>
   )
