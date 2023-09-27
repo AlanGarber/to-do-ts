@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Todos } from "./assets/components/Todos"
+import { TodoId, TodoTitle } from "./types"
 
 const ejemploTodos = [
   {
@@ -24,7 +25,7 @@ const ejemploTodos = [
 const App = (): JSX.Element => {
   const [todos, setTodos] = useState(ejemploTodos)
 
-  const handleRemove = (id: string): void => {
+  const handleRemove = ({id}: TodoId): void => {
     const newTodos = todos.filter(todo => todo.id != id)
     setTodos(newTodos)
   }
