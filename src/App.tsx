@@ -1,8 +1,40 @@
-const App = ():JSX.Element => {
+import { useState } from "react"
+import { Todos } from "./assets/components/Todos"
+
+const ejemploTodos = [
+  {
+    id: '1',
+    title: 'Aprender React',
+    completed: true
+  },
+  {
+    id: '2',
+    title: 'Aprender TypeScript',
+    completed: false
+  },
+  {
+    id: '3',
+    title: 'Practicar Fisica',
+    completed: false
+  }
+]
+
+
+
+const App = (): JSX.Element => {
+  const [todos, setTodos] = useState(ejemploTodos)
+
+  const handleRemove = (id: string): void => {
+    const newTodos = todos.filter(todo => todo.id != id)
+    setTodos(newTodos)
+  }
+
   return (
-    <>
-      <h1>todo mvc</h1>
-    </>
+    <div className="todoapp">
+      <Todos todos={todos} 
+        onRemoveTodo={handleRemove}
+      />
+    </div>
   )
 }
 
